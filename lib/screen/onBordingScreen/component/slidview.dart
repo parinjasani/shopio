@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shopio/constant.dart';
 import 'package:shopio/model/item.dart';
 
 class SlidView extends StatelessWidget {
@@ -17,6 +18,7 @@ class SlidView extends StatelessWidget {
         Text(
           item.title,
           style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+          //style: headingstyle,
         ),
         SizedBox(height: 16,),
         Text(

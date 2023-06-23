@@ -7,7 +7,7 @@ Widget getIndicator(bool active)
     width:active ? 12 :10,
     decoration: BoxDecoration(
       borderRadius: BorderRadius.circular(active ? 12 :10),
-      color: active ? Colors.blueAccent : Colors.grey
+      color: active ? Colors.indigo : Colors.grey
     ),
   );
 }
