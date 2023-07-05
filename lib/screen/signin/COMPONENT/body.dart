@@ -9,32 +9,33 @@ class Body extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: LayoutBuilder(
-        builder: (context, constraints) {
-          return SingleChildScrollView(
-            reverse: true,
-            child: ConstrainedBox(
-              constraints: BoxConstraints(
-                  minHeight: constraints.maxHeight
-              ),
-              child: IntrinsicHeight(
-                child: Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: Column(
-                    children: [
-                      LayoutHeader(),
-                      SizedBox(height: 24,),
-                      SigninForm(),
-                      SizedBox(height: 24,),
-                      LayoutFooter(),
-                    ],
-                  ),
+      child: LayoutBuilder(builder: (context, constraints) {
+        return SingleChildScrollView(
+          physics: BouncingScrollPhysics(),
+          reverse: true,
+          child: ConstrainedBox(
+            constraints: BoxConstraints(minHeight: constraints.maxHeight),
+            child: IntrinsicHeight(
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  children: [
+                    LayoutHeader(),
+                    SizedBox(
+                      height: 24,
+                    ),
+                    SigninForm(),
+                    SizedBox(
+                      height: 24,
+                    ),
+                    LayoutFooter(),
+                  ],
                 ),
               ),
             ),
-          );
-        }
-      ),
+          ),
+        );
+      }),
     );
   }
 }

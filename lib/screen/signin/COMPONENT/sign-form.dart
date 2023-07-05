@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:shopio/components/custom_suffix_icon.dart';
 import 'package:shopio/theme.dart';
+import 'package:shopio/utils/utils.dart';
 class SigninForm extends StatefulWidget {
   @override
   State<SigninForm> createState() => _SigninFormState();
 }
 
 class _SigninFormState extends State<SigninForm> {
-
+   final _emailcontroller=TextEditingController();
+   final _passwordcontroller=TextEditingController();
+   String? erroremail,errorpassword;
   @override
   Widget build(BuildContext context) {
     return Expanded(
@@ -31,10 +34,12 @@ class _SigninFormState extends State<SigninForm> {
 
   buildemailtextfield() {
     return TextFormField(
+      controller: _emailcontroller,
       keyboardType: TextInputType.emailAddress,
       decoration: InputDecoration(
         labelText: "Email",
         hintText: "Email address",
+        errorText: erroremail,
         floatingLabelBehavior: FloatingLabelBehavior.auto,
         suffixIcon: CustomSuffix(svgIcon: 'assets/icon/Mail.svg',),
       ),
@@ -43,10 +48,12 @@ class _SigninFormState extends State<SigninForm> {
 
   buildpasswordtextfield() {
     return TextFormField(
+      controller: _passwordcontroller,
       keyboardType: TextInputType.text,
       decoration: InputDecoration(
         labelText: "Password",
         hintText: "Enter Password",
+        errorText: errorpassword,
         floatingLabelBehavior: FloatingLabelBehavior.auto,
         suffixIcon: CustomSuffix(svgIcon: "assets/icon/Lock.svg"),
       ),
@@ -75,7 +82,25 @@ class _SigninFormState extends State<SigninForm> {
           borderRadius: BorderRadius.circular(28)
       ),
       padding: EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-      onPressed: () {},
+      onPressed: () {
+        String email=_emailcontroller.text.toString().trim();
+        String password=_passwordcontroller.text.toString().trim();
+        if(email.isEmpty||!Utils.isValidEmail(email))
+          {
+            setState(() {
+              erroremail="Enter valid email";
+            });
+          }
+         else if(!Utils.isValidPassword(password))
+          {
+            setState(() {
+              errorpassword="Enter valid password";
+            });
+          }
+        else{
+          //navigate to the home screen
+        }
+      },
       child: Text(
         'Sign In',
         style: TextStyle(fontSize: 20, color: Colors.white),
