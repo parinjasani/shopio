@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:shopio/Routes/approutes.dart';
 import 'package:shopio/components/custom_suffix_icon.dart';
+import 'package:shopio/preferences/pref_utils.dart';
 import 'package:shopio/theme.dart';
 import 'package:shopio/utils/utils.dart';
 class SigninForm extends StatefulWidget {
@@ -91,14 +93,21 @@ class _SigninFormState extends State<SigninForm> {
               erroremail="Enter valid email";
             });
           }
-         else if(!Utils.isValidPassword(password))
+          if(!Utils.isValidPassword(password))
           {
             setState(() {
               errorpassword="Enter valid password";
             });
           }
         else{
+
           //navigate to the home screen
+            PrefUtils.updateloginstatus(true).then((value) {
+              if(value)
+                {
+                  Navigator.pushNamedAndRemoveUntil(context,AppRoute.homescreen, (route) => false);
+                }
+            },);
         }
       },
       child: Text(

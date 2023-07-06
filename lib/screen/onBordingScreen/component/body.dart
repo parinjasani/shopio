@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shopio/Routes/approutes.dart';
+import 'package:shopio/preferences/pref_utils.dart';
 import 'package:shopio/screen/onBordingScreen/component/slidview.dart';
 
 import '../../../model/item.dart';
@@ -74,7 +75,12 @@ class _BodyState extends State<Body> {
                }
                else{
                  //navigate to sign in screen
-                 Navigator.pushReplacementNamed(context,AppRoute.signinscreen);
+                 PrefUtils.updateonboardingstatus(true).then((value) {
+                   if(value)
+                     {
+                       Navigator.pushReplacementNamed(context, AppRoute.signinscreen);
+                     }
+                 },);
                }
               },
               child: Text(currenindex!=itemList.length-1?"Next":"Finish"),

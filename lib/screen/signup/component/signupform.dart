@@ -5,6 +5,9 @@ import 'package:flutter/services.dart';
 import 'package:shopio/components/custom_suffix_icon.dart';
 import 'package:shopio/utils/utils.dart';
 
+import '../../../Routes/approutes.dart';
+import '../../../preferences/pref_utils.dart';
+
 class SignUpForm extends StatefulWidget {
   @override
   State<SignUpForm> createState() => _SignUpFormState();
@@ -404,6 +407,12 @@ class _SignUpFormState extends State<SignUpForm> {
           dob:-${dob}
           address:-${address}
           ''');
+          PrefUtils.updateloginstatus(true).then((value) {
+            if(value)
+            {
+              Navigator.pushNamedAndRemoveUntil(context,AppRoute.homescreen, (route) => false);
+            }
+          },);
         }
       },
       child: Text(

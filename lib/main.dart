@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:shopio/Routes/approutes.dart';
+import 'package:shopio/preferences/pref_utils.dart';
 import 'package:shopio/theme.dart';
 
-void main() => runApp(MyApp());
+ main() async {
+   WidgetsFlutterBinding.ensureInitialized();
+   await PrefUtils.init();
+   runApp(MyApp());
+ }
 
 class MyApp extends StatelessWidget {
   @override

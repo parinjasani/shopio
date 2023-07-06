@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:shopio/Routes/approutes.dart';
+import 'package:shopio/preferences/pref_utils.dart';
 
 import '../../../constant.dart';
 
@@ -16,9 +17,23 @@ class _BodyState extends State<Body> {
   @override
   void initState() {
     // TODO: implement initState
-    Timer(Duration(seconds: 5), () {
+    Timer(Duration(seconds: 3), () {
       //NAvigate to onboradiing
-      Navigator.pushReplacementNamed(context,AppRoute.onboradingscreen);
+      if(PrefUtils.getloginstatus())
+        {
+          Navigator.pushReplacementNamed(context, AppRoute.homescreen);
+        }
+      else{
+        if(PrefUtils.getonboardingstatus())
+          {
+            Navigator.pushReplacementNamed(context, AppRoute.signinscreen);
+          }
+        else
+          {
+            Navigator.pushReplacementNamed(context,AppRoute.onboradingscreen);
+          }
+      }
+
     });
     super.initState();
   }
