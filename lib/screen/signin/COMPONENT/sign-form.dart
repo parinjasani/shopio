@@ -4,6 +4,8 @@ import 'package:shopio/components/custom_suffix_icon.dart';
 import 'package:shopio/preferences/pref_utils.dart';
 import 'package:shopio/theme.dart';
 import 'package:shopio/utils/utils.dart';
+
+import '../../../components/user.dart';
 class SigninForm extends StatefulWidget {
   @override
   State<SigninForm> createState() => _SigninFormState();
@@ -87,6 +89,7 @@ class _SigninFormState extends State<SigninForm> {
       onPressed: () {
         String email=_emailcontroller.text.toString().trim();
         String password=_passwordcontroller.text.toString().trim();
+        User user=User(email:email);
         if(email.isEmpty||!Utils.isValidEmail(email))
           {
             setState(() {
@@ -105,7 +108,7 @@ class _SigninFormState extends State<SigninForm> {
             PrefUtils.updateloginstatus(true).then((value) {
               if(value)
                 {
-                  Navigator.pushNamedAndRemoveUntil(context,AppRoute.homescreen, (route) => false);
+                  Navigator.pushNamedAndRemoveUntil(context,AppRoute.homescreen, (route) => false,arguments: user);
                 }
             },);
         }

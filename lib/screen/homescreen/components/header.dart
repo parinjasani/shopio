@@ -10,7 +10,10 @@ class LayoutHeader extends StatelessWidget {
       children: [
         RoundedIcon(
           icondata: Icons.menu,
-          onpress: () {},
+          onpress: () {
+            print("clicked");
+            Scaffold.of(context).openDrawer();
+          },
         ),
         SizedBox(
           width: 10,
@@ -21,7 +24,9 @@ class LayoutHeader extends StatelessWidget {
         ),
         RoundedIcon(
           icondata: Icons.shopping_cart,
-          onpress: () {},
+          onpress: () {
+            print("cart clicked");
+          },
         )
       ],
     );

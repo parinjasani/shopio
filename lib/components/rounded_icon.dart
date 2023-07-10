@@ -12,9 +12,7 @@ class RoundedIcon extends StatelessWidget {
       height: 40,
       width: 40,
       child: MaterialButton(
-        onPressed: () {
-          onpress;
-        },
+        onPressed: onpress,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(45),
         ),

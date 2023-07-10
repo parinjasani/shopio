@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shopio/components/user.dart';
 import 'package:shopio/screen/homescreen/homescreen.dart';
 import '../screen/onBordingScreen/onbordingscreen.dart';
 import '../screen/signin/SIGN-IN_SCREEN.dart';
@@ -12,6 +13,7 @@ class AppRoute{
   static const homescreen="/homescreen";
   
   static Route<dynamic>? generateRoute(RouteSettings settings){
+    var arguments=settings.arguments;
     switch (settings.name){
       case splashscreen:
       return MaterialPageRoute(builder: (context) => SplashScreen()
@@ -22,8 +24,14 @@ class AppRoute{
         return MaterialPageRoute(builder: (context) => SignInScreen(),);
       case signupscreen:
         return MaterialPageRoute(builder: (context) => SignUpScreen(),);
+      // case homescreen:
+      //   if(arguments is User){
+      //     User user=arguments as User;
+      //     return MaterialPageRoute(builder: (context) => HomeScreen(user),);
+      //   }
       case homescreen:
         return MaterialPageRoute(builder: (context) => HomeScreen(),);
+
 
     }
   }
