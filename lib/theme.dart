@@ -4,18 +4,39 @@ ThemeData apptheme()
   return ThemeData(
     scaffoldBackgroundColor: Colors.white,
     primarySwatch: Colors.indigo,
+      elevatedButtonTheme: elevatedButtonTheme(),
     textButtonTheme: textbuttontheme(),
     inputDecorationTheme: inputdecorationtheme(),
     appBarTheme: appbartheme(),
+    textTheme: textTheme()
+  );
+}
+
+elevatedButtonTheme() {
+  return ElevatedButtonThemeData(
+    style: ButtonStyle(
+      padding: MaterialStateProperty.all(
+        EdgeInsets.symmetric(horizontal: 30),
+      ),
+      foregroundColor: MaterialStateProperty.all(Colors.white),
+      backgroundColor: MaterialStateProperty.all(Colors.pink),
+    ),
+  );
+}
+
+textTheme() {
+  return TextTheme(
+    bodyMedium: TextStyle(color: Colors.black, fontSize: 16),
   );
 }
 
 appbartheme() {
   return AppBarTheme(
-    centerTitle: true,
-    color: Colors.white,
     elevation: 0,
-    iconTheme: IconThemeData(color: Colors.black)
+    color: Colors.white,
+    centerTitle: true,
+    iconTheme: IconThemeData(color: Colors.black),
+
   );
 }
 

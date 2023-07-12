@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shopio/Routes/approutes.dart';
 
 class HomeScreenDrawer extends StatelessWidget {
   const HomeScreenDrawer({Key? key}) : super(key: key);
@@ -9,6 +10,14 @@ class HomeScreenDrawer extends StatelessWidget {
       child: ListView(
         children: [
           builduseraccountHeader(),
+          ListTile(
+            title: Text("Manage category"),
+            leading: Icon(Icons.add_box_outlined),
+            //navigate to categorylist screen
+            onTap: () {
+              Navigator.pushNamed(context, AppRoute.categorylist);
+            },
+          )
         ],
       ),
     );
