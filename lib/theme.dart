@@ -18,7 +18,7 @@ elevatedButtonTheme() {
         EdgeInsets.symmetric(horizontal: 30),
       ),
       foregroundColor: MaterialStateProperty.all(Colors.white),
-      backgroundColor: MaterialStateProperty.all(Colors.pink),
+      backgroundColor: MaterialStateProperty.all(Colors.indigo),
     ),
   );
 }

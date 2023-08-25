@@ -11,12 +11,7 @@ class CategoryList extends StatelessWidget {
       appBar: AppBar(
         title: Text("Category"),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.pushNamed(context, AppRoute.categoryadd);
-        },
-        child: Icon(Icons.add,color: Colors.white,),
-      ),
+
     );
   }
 }
