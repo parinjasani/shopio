@@ -1,3 +1,4 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:shopio/Routes/approutes.dart';
 import 'package:shopio/preferences/pref_utils.dart';
@@ -5,6 +6,7 @@ import 'package:shopio/theme.dart';
 
  main() async {
    WidgetsFlutterBinding.ensureInitialized();
+   Firebase.initializeApp();
    await PrefUtils.init();
    runApp(MyApp());
  }

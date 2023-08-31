@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:shopio/Routes/approutes.dart';
 import 'package:shopio/components/custom_suffix_icon.dart';
@@ -15,7 +16,37 @@ class _SigninFormState extends State<SigninForm> {
    final _emailcontroller=TextEditingController();
    final _passwordcontroller=TextEditingController();
    String? erroremail,errorpassword;
-  @override
+
+   Future<void> loginwithfirebase(BuildContext context, String email, String password) async {
+     try {
+       final credential = await FirebaseAuth.instance.signInWithEmailAndPassword(
+           email: email,
+           password: password
+       );
+
+       if(credential.user != null)
+         {
+           //navigaet to homescreen
+
+           Navigator.pushNamedAndRemoveUntil(context,AppRoute.homescreen, (route) => false,);
+         }
+     }on FirebaseAuthException catch (e) {
+       if (e.code == 'user-not-found') {
+         print('No user found for that email.');
+       } else if (e.code == 'wrong-password') {
+         print('Wrong password provided for that user.');
+       }
+     }
+   }
+
+   @override
+  void dispose() {
+    // TODO: implement dispose
+     _emailcontroller.dispose();
+     _passwordcontroller.dispose();
+    super.dispose();
+  }
+   @override
   Widget build(BuildContext context) {
     return Expanded(
       child: Column(
@@ -30,7 +61,7 @@ class _SigninFormState extends State<SigninForm> {
           SizedBox(
             height: 24,
           ),
-          buildsigninbutton(),
+          buildsigninbutton(context),
         ],
       ),
     );
@@ -54,9 +85,11 @@ class _SigninFormState extends State<SigninForm> {
     return TextFormField(
       controller: _passwordcontroller,
       keyboardType: TextInputType.text,
+      obscureText:true,
       decoration: InputDecoration(
         labelText: "Password",
         hintText: "Enter Password",
+
         errorText: errorpassword,
         floatingLabelBehavior: FloatingLabelBehavior.auto,
         suffixIcon: CustomSuffix(svgIcon: "assets/icon/Lock.svg"),
@@ -78,7 +111,7 @@ class _SigninFormState extends State<SigninForm> {
     );
   }
 
-  buildsigninbutton() {
+  buildsigninbutton(BuildContext context) {
     return MaterialButton(
       color: Colors.indigo,
       minWidth: double.infinity,
@@ -89,7 +122,7 @@ class _SigninFormState extends State<SigninForm> {
       onPressed: () {
         String email=_emailcontroller.text.toString().trim();
         String password=_passwordcontroller.text.toString().trim();
-        User user=User(email:email);
+        //User user=User(email:email);
         if(email.isEmpty||!Utils.isValidEmail(email))
           {
             setState(() {
@@ -105,12 +138,13 @@ class _SigninFormState extends State<SigninForm> {
         else{
 
           //navigate to the home screen
-            PrefUtils.updateloginstatus(true).then((value) {
-              if(value)
-                {
-                  Navigator.pushNamedAndRemoveUntil(context,AppRoute.homescreen, (route) => false,arguments: user);
-                }
-            },);
+          //   PrefUtils.updateloginstatus(true).then((value) {
+          //     if(value)
+          //       {
+          //         Navigator.pushNamedAndRemoveUntil(context,AppRoute.homescreen, (route) => false,arguments: user);
+          //       }
+          //   },);
+            loginwithfirebase(context,email,password);
         }
       },
       child: Text(
@@ -119,4 +153,5 @@ class _SigninFormState extends State<SigninForm> {
       ),
     );
   }
+
 }

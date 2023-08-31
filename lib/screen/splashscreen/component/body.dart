@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:shopio/Routes/approutes.dart';
 import 'package:shopio/preferences/pref_utils.dart';
@@ -19,24 +20,41 @@ class _BodyState extends State<Body> {
     // TODO: implement initState
     Timer(Duration(seconds: 3), () {
       //NAvigate to onboradiing
-      if(PrefUtils.getloginstatus())
-        {
+      FirebaseAuth.instance.authStateChanges().listen((User? user) {
+        if (user != null) {
+          print('User is signed in ');
           Navigator.pushReplacementNamed(context, AppRoute.homescreen);
-        }
-      else{
-        if(PrefUtils.getonboardingstatus())
-          {
-            Navigator.pushReplacementNamed(context, AppRoute.signinscreen);
-          }
-        else
-          {
-            Navigator.pushReplacementNamed(context,AppRoute.onboradingscreen);
-          }
-      }
+        } else {
 
+          if(PrefUtils.getonboardingstatus())
+              {
+                Navigator.pushReplacementNamed(context, AppRoute.signinscreen);
+              }
+            else
+              {
+                Navigator.pushReplacementNamed(context,AppRoute.onboradingscreen);
+              }
+        }
+      });
+
+      // if(PrefUtils.getloginstatus())
+      //   {
+      //     Navigator.pushReplacementNamed(context, AppRoute.homescreen);
+      //   }
+      // else{
+      //   if(PrefUtils.getonboardingstatus())
+      //     {
+      //       Navigator.pushReplacementNamed(context, AppRoute.signinscreen);
+      //     }
+      //   else
+      //     {
+      //       Navigator.pushReplacementNamed(context,AppRoute.onboradingscreen);
+      //     }
+      // }
     });
     super.initState();
   }
+
   Widget build(BuildContext context) {
     return Stack(
       children: [
@@ -45,7 +63,13 @@ class _BodyState extends State<Body> {
             gradient: Backgroungradiant,
           ),
         ),
-        Center(child: Image.asset("assets/images/shop-logo.png",height:600,width: 300,),)
+        Center(
+          child: Image.asset(
+            "assets/images/shop-logo.png",
+            height: 600,
+            width: 300,
+          ),
+        )
       ],
     );
   }

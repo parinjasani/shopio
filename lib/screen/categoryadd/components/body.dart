@@ -9,7 +9,6 @@ import 'package:shopio/database/db_helper.dart';
 import 'package:shopio/model/category.dart';
 
 class Body extends StatefulWidget {
-
   Category? category;
 
   Body(this.category);
@@ -19,11 +18,9 @@ class Body extends StatefulWidget {
 }
 
 class _BodyState extends State<Body> {
-
   DbHelper dbHelper = DbHelper();
 
   Category? category;
-
 
   _BodyState(this.category);
 
@@ -41,8 +38,7 @@ class _BodyState extends State<Body> {
       print("Category added successfully");
       category.id = id;
       Navigator.pop(context, category);
-    }
-    else {
+    } else {
       print("getting error");
     }
   }
@@ -53,8 +49,7 @@ class _BodyState extends State<Body> {
       print("Category updated successfully");
       category.id = id;
       Navigator.pop(context, category);
-    }
-    else {
+    } else {
       print("getting error");
     }
   }
@@ -73,9 +68,7 @@ class _BodyState extends State<Body> {
   Future<String?> saveimage(File imageFile) async {
     Directory root = await getApplicationSupportDirectory();
 
-    String filename = '${DateTime
-        .now()
-        .millisecondsSinceEpoch}.svg';
+    String filename = '${DateTime.now().millisecondsSinceEpoch}.svg';
 
     print(root);
     print(filename);
@@ -85,7 +78,6 @@ class _BodyState extends State<Body> {
 
     return file.path;
   }
-
 
   @override
   void initState() {
@@ -106,51 +98,57 @@ class _BodyState extends State<Body> {
         child: Padding(
           padding: const EdgeInsets.all(24.0),
           child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
               InkWell(
-              onTap: () async {
-        pickimagefromgalary();
-        // Directory tempdir= await  getTemporaryDirectory();
-        // print("tempdirectory : ${tempdir.path}");
-        //
-        // Directory docdir= await  getApplicationDocumentsDirectory();
-        // print("docdirectory : ${docdir.path}");
-        //
-        // Directory supportdir= await  getApplicationSupportDirectory();
-        // print("supportdirectory : ${supportdir.path}");
-        },
-          child: CircleAvatar(
-              backgroundColor: Colors.grey.withOpacity(.30),
-              // backgroundImage: imageFile != null
-              //     ? FileImage(imageFile!)
-              //     : AssetImage(
-              //   "assets/images/userlogo.png",) as ImageProvider,
-              child: imageFile!=null ? SvgPicture.file(
-                imageFile!,
-                height: 50,
-                colorFilter: ColorFilter.mode(Colors.black45, BlendMode.srcIn),
-              ) : Icon(Icons.add,size: 50,color: Colors.black45,),
-          radius: 60,
+                onTap: () async {
+                  pickimagefromgalary();
+                  // Directory tempdir= await  getTemporaryDirectory();
+                  // print("tempdirectory : ${tempdir.path}");
+                  //
+                  // Directory docdir= await  getApplicationDocumentsDirectory();
+                  // print("docdirectory : ${docdir.path}");
+                  //
+                  // Directory supportdir= await  getApplicationSupportDirectory();
+                  // print("supportdirectory : ${supportdir.path}");
+                },
+                child: CircleAvatar(
+                  backgroundColor: Colors.grey.withOpacity(.30),
+                  // backgroundImage: imageFile != null
+                  //     ? FileImage(imageFile!)
+                  //     : AssetImage(
+                  //   "assets/images/userlogo.png",) as ImageProvider,
+                  child: imageFile != null
+                      ? SvgPicture.file(
+                          imageFile!,
+                          height: 50,
+                          colorFilter:
+                              ColorFilter.mode(Colors.black45, BlendMode.srcIn),
+                        )
+                      : Icon(
+                          Icons.add,
+                          size: 50,
+                          color: Colors.black45,
+                        ),
+                  radius: 60,
+                ),
+              ),
+              SizedBox(
+                height: 24,
+              ),
+              buildtitleformfield(),
+              SizedBox(
+                height: 24,
+              ),
+              buildDescriptionFormField(),
+              SizedBox(
+                height: 24,
+              ),
+              buildaddcategorybutton(context),
+            ],
+          ),
         ),
       ),
-      SizedBox(
-        height: 24,
-      ),
-      buildtitleformfield(),
-      SizedBox(
-        height: 24,
-      ),
-      buildDescriptionFormField(),
-      SizedBox(
-        height: 24,
-      ),
-      buildaddcategorybutton(context),
-      ],
-    ),)
-    ,
-    )
-    ,
     );
   }
 
@@ -193,7 +191,6 @@ class _BodyState extends State<Body> {
         String title = categorycontroller.text.toString().trim();
         String desc = categorydescriptioncontroller.text.toString().trim();
 
-
         if (imageFile != null) {
           var path = await saveimage(imageFile!);
 
@@ -206,22 +203,18 @@ class _BodyState extends State<Body> {
                   id: category!.id,
                   date: category!.date);
               updateCategory(cat, context);
-            }
-            else {
+            } else {
               // add
-              Category category = Category(
-                  title: title, description: desc, imagepath: path);
+              Category category =
+                  Category(title: title, description: desc, imagepath: path);
               addCategory(category, context);
             }
           }
         }
         // print("$title $desc");
-
-
       },
       child: Text(
-        category == null ?
-        'Add Category' : 'update category',
+        category == null ? 'Add Category' : 'update category',
         style: TextStyle(
           fontSize: 20,
           color: Colors.white,
@@ -229,6 +222,4 @@ class _BodyState extends State<Body> {
       ),
     );
   }
-
-
 }

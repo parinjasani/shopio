@@ -1,8 +1,10 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:shopio/Routes/approutes.dart';
 
 class HomeScreenDrawer extends StatelessWidget {
-  const HomeScreenDrawer({Key? key}) : super(key: key);
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +19,23 @@ class HomeScreenDrawer extends StatelessWidget {
             onTap: () {
               Navigator.pushNamed(context, AppRoute.categorylist);
             },
-          )
+          ),
+          ListTile(
+            title: Text("Manage Product"),
+            leading: Icon(Icons.add_box_outlined),
+          ),
+          Divider(
+            height:30,
+            indent: 40,
+            color: Colors.grey,
+          ),
+          ListTile(
+            title: Text("Logout"),
+            leading: Icon(Icons.logout),
+            onTap: () {
+              FirebaseAuth.instance.signOut().then((value) => Navigator.pushReplacementNamed(context, AppRoute.signinscreen));
+            },
+          ),
         ],
       ),
     );

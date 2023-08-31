@@ -1,5 +1,4 @@
-import 'dart:math';
-
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shopio/components/custom_suffix_icon.dart';
@@ -23,6 +22,29 @@ class _SignUpFormState extends State<SignUpForm> {
   String? _fname, _lname, _email, _contact, _password;
   String address = " ", usertype = " ", dob = " ";
 
+  Future<void> createaccount(BuildContext context,String email, String password) async {
+    try {
+      final credential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      if(credential.user != null)
+        {
+          Navigator.pushNamedAndRemoveUntil(context,AppRoute.homescreen, (route) => false);
+          print("${credential.user!.email}");
+          print("${credential.user!.uid}");
+
+        }
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'weak-password') {
+        print('The password provided is too weak.');
+      } else if (e.code == 'email-already-in-use') {
+        print('The account already exists for that email.');
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
   genderselection(String select) {
     setState(() {
       gender = select;
@@ -95,7 +117,7 @@ class _SignUpFormState extends State<SignUpForm> {
             SizedBox(
               height: 20,
             ),
-            buildsignupbutton(),
+            buildsignupbutton(context),
           ],
         ),
       ),
@@ -389,7 +411,7 @@ class _SignUpFormState extends State<SignUpForm> {
     );
   }
 
-  buildsignupbutton() {
+  buildsignupbutton(BuildContext context) {
     return MaterialButton(
       color: Colors.indigo,
       minWidth: double.infinity,
@@ -405,14 +427,17 @@ class _SignUpFormState extends State<SignUpForm> {
           gender:-${gender}
           usertype:-${usertype}
           dob:-${dob}
-          address:-${address}
-          ''');
-          PrefUtils.updateloginstatus(true).then((value) {
-            if(value)
-            {
-              Navigator.pushNamedAndRemoveUntil(context,AppRoute.homescreen, (route) => false);
-            }
-          },);
+          address:-${address}''');
+
+
+          //store this data to databae or server
+          // PrefUtils.updateloginstatus(true).then((value) {
+          //   if(value)
+          //   {
+          //     Navigator.pushNamedAndRemoveUntil(context,AppRoute.homescreen, (route) => false);
+          //   }
+          // },);
+          createaccount(context,_email!,_password!);
         }
       },
       child: Text(
@@ -421,4 +446,6 @@ class _SignUpFormState extends State<SignUpForm> {
       ),
     );
   }
+
+
 }
