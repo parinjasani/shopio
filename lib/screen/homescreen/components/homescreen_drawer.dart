@@ -1,10 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:shopio/Routes/approutes.dart';
+import 'package:shopio/firebase/firebase_service.dart';
 
 class HomeScreenDrawer extends StatelessWidget {
 
-
+  FirebaseService _service = FirebaseService();
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +26,7 @@ class HomeScreenDrawer extends StatelessWidget {
             leading: Icon(Icons.add_box_outlined),
           ),
           Divider(
-            height:30,
+            height: 30,
             indent: 40,
             color: Colors.grey,
           ),
@@ -33,7 +34,7 @@ class HomeScreenDrawer extends StatelessWidget {
             title: Text("Logout"),
             leading: Icon(Icons.logout),
             onTap: () {
-              FirebaseAuth.instance.signOut().then((value) => Navigator.pushReplacementNamed(context, AppRoute.signinscreen));
+              _service.logout().then((value) => Navigator.restorablePushNamedAndRemoveUntil(context, AppRoute.signinscreen, (route) => false));
             },
           ),
         ],
@@ -53,11 +54,12 @@ class HomeScreenDrawer extends StatelessWidget {
       ),
       margin: EdgeInsets.zero,
       decoration: BoxDecoration(
-        color: Colors.blueAccent
+          color: Colors.blueAccent
       ),
       currentAccountPicture: CircleAvatar(
         backgroundColor: Colors.white,
-        child: Image.asset("assets/images/userlogo.png",height: 60,width: 60,),
+        child: Image.asset(
+          "assets/images/userlogo.png", height: 60, width: 60,),
       ),
     );
   }

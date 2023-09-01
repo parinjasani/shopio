@@ -5,7 +5,6 @@ class CategoryAdd extends StatelessWidget {
 
   Category? category;
 
-
   CategoryAdd({this.category});
 
   @override

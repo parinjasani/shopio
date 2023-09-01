@@ -38,6 +38,7 @@ dependencies:
   path_provider: ^2.0.15
   firebase_core: ^2.15.0
   firebase_auth: ^4.7.2
+  firebase_database: ^10.2.5
 
 
 

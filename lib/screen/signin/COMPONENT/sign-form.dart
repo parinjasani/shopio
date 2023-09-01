@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:shopio/Routes/approutes.dart';
 import 'package:shopio/components/custom_suffix_icon.dart';
+import 'package:shopio/firebase/firebase_service.dart';
 import 'package:shopio/preferences/pref_utils.dart';
 import 'package:shopio/theme.dart';
 import 'package:shopio/utils/utils.dart';
@@ -17,26 +18,35 @@ class _SigninFormState extends State<SigninForm> {
    final _passwordcontroller=TextEditingController();
    String? erroremail,errorpassword;
 
+   FirebaseService _service=FirebaseService();
+
+
+
    Future<void> loginwithfirebase(BuildContext context, String email, String password) async {
-     try {
-       final credential = await FirebaseAuth.instance.signInWithEmailAndPassword(
-           email: email,
-           password: password
-       );
 
-       if(credential.user != null)
-         {
-           //navigaet to homescreen
+     var credential=await _service.login(email,password);
 
-           Navigator.pushNamedAndRemoveUntil(context,AppRoute.homescreen, (route) => false,);
-         }
-     }on FirebaseAuthException catch (e) {
-       if (e.code == 'user-not-found') {
-         print('No user found for that email.');
-       } else if (e.code == 'wrong-password') {
-         print('Wrong password provided for that user.');
+     if(credential is UserCredential)
+       {
+         // suceesfully enter
+         if(credential.user != null)
+           {
+             //user exist
+             print("${credential.user!.uid}");
+             //navigate to homescreen
+             Navigator.pushNamedAndRemoveUntil(context, AppRoute.homescreen, (route) => false);
+           }
        }
+     else if(credential is String)
+     {
+       //exception return failed
+       print("exception occur");
      }
+     else{
+       print("object is null");
+     }
+
+
    }
 
    @override

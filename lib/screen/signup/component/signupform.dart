@@ -1,7 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:shopio/components/appuser.dart';
 import 'package:shopio/components/custom_suffix_icon.dart';
+import 'package:shopio/firebase/firebase_service.dart';
 import 'package:shopio/utils/utils.dart';
 
 import '../../../Routes/approutes.dart';
@@ -22,28 +24,28 @@ class _SignUpFormState extends State<SignUpForm> {
   String? _fname, _lname, _email, _contact, _password;
   String address = " ", usertype = " ", dob = " ";
 
-  Future<void> createaccount(BuildContext context,String email, String password) async {
-    try {
-      final credential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
-      if(credential.user != null)
-        {
-          Navigator.pushNamedAndRemoveUntil(context,AppRoute.homescreen, (route) => false);
-          print("${credential.user!.email}");
-          print("${credential.user!.uid}");
 
-        }
-    } on FirebaseAuthException catch (e) {
-      if (e.code == 'weak-password') {
-        print('The password provided is too weak.');
-      } else if (e.code == 'email-already-in-use') {
-        print('The account already exists for that email.');
-      }
-    } catch (e) {
-      print(e);
-    }
+   FirebaseService _service=FirebaseService();
+  Future<void> createaccount(BuildContext context,AppUser user) async {
+   var credential= await _service.signUp(user.email!,user.password!);
+   if(credential is UserCredential)
+     {
+       if(credential.user != null)
+       {
+         user.id=credential.user!.uid;
+         print("${credential.user!.uid}");
+         _service.createuser(user).then((value) {
+           //sucess
+           Navigator.pushNamedAndRemoveUntil(context, AppRoute.homescreen,(route) => false);
+         }).catchError((error){
+           //error
+           print("error : ${error.toString()}");
+         });
+       }
+     }
+   else if(credential is String){
+     print("exception occur");
+   }
   }
   genderselection(String select) {
     setState(() {
@@ -429,7 +431,7 @@ class _SignUpFormState extends State<SignUpForm> {
           dob:-${dob}
           address:-${address}''');
 
-
+         var user=AppUser(fname: _fname,lname:_lname,email: _email,contact: _contact,gender: gender,userType: usertype,dob:dob,address: address,password: _password);
           //store this data to databae or server
           // PrefUtils.updateloginstatus(true).then((value) {
           //   if(value)
@@ -437,7 +439,7 @@ class _SignUpFormState extends State<SignUpForm> {
           //     Navigator.pushNamedAndRemoveUntil(context,AppRoute.homescreen, (route) => false);
           //   }
           // },);
-          createaccount(context,_email!,_password!);
+          createaccount(context,user);
         }
       },
       child: Text(
