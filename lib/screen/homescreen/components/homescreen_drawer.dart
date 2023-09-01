@@ -22,6 +22,9 @@ class HomeScreenDrawer extends StatelessWidget {
             },
           ),
           ListTile(
+            onTap: () {
+              Navigator.pushNamed(context, AppRoute.productlist);
+            },
             title: Text("Manage Product"),
             leading: Icon(Icons.add_box_outlined),
           ),
@@ -49,7 +52,7 @@ class HomeScreenDrawer extends StatelessWidget {
         style: TextStyle(color: Colors.white),
       ),
       accountEmail: Text(
-        "parinjassani0@gmail.com",
+        "${FirebaseAuth.instance.currentUser!.email}",
         style: TextStyle(color: Colors.white),
       ),
       margin: EdgeInsets.zero,

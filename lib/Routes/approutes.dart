@@ -4,6 +4,8 @@ import 'package:shopio/model/category.dart';
 import 'package:shopio/screen/categoryadd/categoryadd.dart';
 import 'package:shopio/screen/categorylist/categorylist.dart';
 import 'package:shopio/screen/homescreen/homescreen.dart';
+import 'package:shopio/screen/productadd/productadd.dart';
+import 'package:shopio/screen/productlist/productlist.dart';
 import '../screen/onBordingScreen/onbordingscreen.dart';
 import '../screen/signin/SIGN-IN_SCREEN.dart';
 import '../screen/signup/signup.dart';
@@ -17,6 +19,8 @@ class AppRoute {
   static const homescreen = "/homescreen";
   static const categorylist = "/categorylistscreen";
   static const categoryadd = "/categoryaddscreen";
+  static const productlist = "/productlistscreen";
+  static const productadd = "/productaddscreen";
 
   static Route<dynamic>? generateRoute(RouteSettings settings) {
     var arguments = settings.arguments;
@@ -57,6 +61,12 @@ class AppRoute {
             category: category,
           ),
         );
+
+      case productlist:
+        return MaterialPageRoute(builder: (context) => ProductListScreen(),);
+
+      case productadd:
+        return MaterialPageRoute(builder: (context) => ProductAdd(),);
     }
   }
 }
