@@ -57,8 +57,10 @@ class _BodyState extends State<Body> {
   Future<void> pickimagefromgalary() async {
     var tempfile = await ImagePicker().pickImage(source: ImageSource.gallery);
     if (tempfile != null) {
-      // print(tempfile.path);
+       
       var file = File(tempfile.path);
+      print("path (gallery) ${file.path}");
+      print("basename ${basename(tempfile.path)}");
       setState(() {
         imageFile = file;
       });
@@ -66,17 +68,32 @@ class _BodyState extends State<Body> {
   }
 
   Future<String?> saveimage(File imageFile) async {
+
+    String  name= basename(imageFile.path);
+    print("name : $name");
+
     Directory root = await getApplicationSupportDirectory();
 
-    String filename = '${DateTime.now().millisecondsSinceEpoch}.svg';
+    String existpath=join(root.path,name);
+    File mfile= File(existpath);
 
-    print(root);
-    print(filename);
-    var path = await join(root.path, filename);
 
-    File file = await imageFile.copy(path);
+    if(await mfile.exists()==false)
+      {
+        String filename = '${DateTime.now().millisecondsSinceEpoch}.svg';
+        print(root);
 
-    return file.path;
+        var path = await join(root.path, filename);
+
+        print("path (database) ${path}");
+
+        File file = await imageFile.copy(path);
+
+        return file.path;
+
+      }
+
+    return imageFile.path;
   }
 
   @override
@@ -85,6 +102,7 @@ class _BodyState extends State<Body> {
     if (category != null) {
       categorycontroller.text = category!.title!;
       categorydescriptioncontroller.text = category!.description!;
+      imageFile = File(category!.imagepath!);
     }
     super.initState();
   }
@@ -193,7 +211,6 @@ class _BodyState extends State<Body> {
 
         if (imageFile != null) {
           var path = await saveimage(imageFile!);
-
           if (path != null) {
             if (category != null) {
               //uppdate
@@ -201,7 +218,7 @@ class _BodyState extends State<Body> {
                   title: title,
                   description: desc,
                   id: category!.id,
-                  date: category!.date);
+                  date: category!.date,imagepath: path);
               updateCategory(cat, context);
             } else {
               // add

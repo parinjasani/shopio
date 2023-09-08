@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:shopio/components/appuser.dart';
+import 'package:shopio/model/appuser.dart';
 import 'package:shopio/components/custom_suffix_icon.dart';
 import 'package:shopio/firebase/firebase_service.dart';
 import 'package:shopio/utils/utils.dart';
@@ -448,6 +448,5 @@ class _SignUpFormState extends State<SignUpForm> {
       ),
     );
   }
-
 
 }

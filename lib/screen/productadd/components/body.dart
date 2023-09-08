@@ -1,33 +1,80 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:path/path.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:shopio/firebase/firebase_service.dart';
+import 'package:shopio/model/product.dart';
 
 import '../../../database/db_helper.dart';
 import '../../../model/category.dart';
 
 class Body extends StatefulWidget {
-  const Body({super.key});
+  Product? product;
+
+  Body(this.product);
+
 
   @override
-  State<Body> createState() => _BodyState();
+  State<Body> createState() => _BodyState(product);
 }
 
 class _BodyState extends State<Body> {
-  List<Category> categoryList = [];
 
+   Product? product;
+  _BodyState(this.product);
+
+
+
+   List<Category> categoryList = [];
+
+   ImagePicker imagePicker = ImagePicker();
+
+  File? imageFile;
 
   int categoryId = -1;
 
   final DbHelper _dbHelper = DbHelper();
+
+
+  FirebaseService _service= FirebaseService();
 
   final _titleController = TextEditingController();
   final _descController = TextEditingController();
   final _priceController = TextEditingController(text: '0.0');
   final _discountController = TextEditingController(text: '0');
 
+  Future<void> pickimagefromcamera() async {
+    var tempfile = await ImagePicker().pickImage(source: ImageSource.camera);
+    if (tempfile != null) {
+
+      var file = File(tempfile.path);
+      print("path (gallery) ${file.path}");
+      print("basename ${basename(tempfile.path)}");
+      setState(() {
+        imageFile = file;
+      });
+    }
+  }
+   Future<String?> saveimage(File imageFile) async {
+    return await _service.uploadproductimage(imageFile);
+   }
+  void addProduct(Product product,BuildContext context) {
+     _service.addProduct(product).then((value) {
+       if(value)
+         {
+           Navigator.pop(context);
+         }
+     },);
+  }
 
   @override
   void initState() {
     super.initState();
     getCategoryList();
+   ;
+
   }
 
   @override
@@ -42,18 +89,26 @@ class _BodyState extends State<Body> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               InkWell(
-                onTap: () async {},
+                onTap: () async {
+                  pickimagefromcamera();
+                },
                 child: CircleAvatar(
                   backgroundColor: Colors.grey.withOpacity(.30),
-                  radius: 60,
-                  /* backgroundImage: imageFile != null
-                      ? FileImage(imageFile!)
-                      : AssetImage('assets/images/user.png') as ImageProvider,*/
-                  child: Icon(
+                  // backgroundImage: imageFile != null
+                  //     ? FileImage(imageFile!)
+                  //     : AssetImage(
+                  //   "assets/images/userlogo.png",) as ImageProvider,
+                  child: imageFile != null
+                      ? CircleAvatar(
+                    radius: 60,
+                    foregroundImage: FileImage(imageFile!) ,
+                  )
+                      : Icon(
                     Icons.add,
                     size: 50,
                     color: Colors.black45,
                   ),
+                  radius: 60,
                 ),
               ),
               SizedBox(
@@ -169,6 +224,7 @@ class _BodyState extends State<Body> {
 
   buildCategoryFormField() {
     return DropdownButtonFormField(
+      value: product == null ? null : categoryId,
       iconEnabledColor: Colors.black45,
       validator: (value) {
         if (value == null) {
@@ -211,17 +267,30 @@ class _BodyState extends State<Body> {
         double price = _priceController.text.toString().trim().isEmpty ? 0.0 : double.parse(_priceController.text.toString().trim());
         int discount = _discountController.text.toString().trim().isEmpty ? 0 : int.parse(_discountController.text.toString().trim());
 
-        print('''
-          title : $title
-          description : $description
-          price : $price
-          discount : $discount
-          categoryId : $categoryId
-        ''');
+        var path = await saveimage(imageFile!);
+        print('product imagepath: $path');
+        if(product==null)
+          {
+            Product product1=Product(title: title, description: description, mrp: price, discount: discount, categoryid: categoryId, imagepath: path!);
+
+            addProduct(product1,context);
+
+          }
+        else{
+          _service.updateproduct(title, description,categoryId, discount, price,product!.id); //,path!);
+          Navigator.pop(context);
+        }
+        // print('''
+        //   title : $title
+        //   description : $description
+        //   price : $price
+        //   discount : $discount
+        //   categoryId : $categoryId
+        // ''');
 
       },
       child: Text(
-        'Add Product',
+        product == null ? 'Add Product' : 'Update Product',
         style: TextStyle(
           fontSize: 20,
           color: Colors.white,
@@ -234,7 +303,17 @@ class _BodyState extends State<Body> {
     var list = await _dbHelper.getcategoylist();
     setState(() {
       categoryList = list;
+
+      if(product!=null){
+        _titleController.text=product!.title;
+        _descController.text=product!.description;
+        _priceController.text='${product!.mrp}';
+        _discountController.text="${product!.discount}";
+        categoryId =product!.categoryid;
+      }
+
     });
   }
+
 }
 

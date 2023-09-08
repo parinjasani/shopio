@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shopio/components/user.dart';
 import 'package:shopio/model/category.dart';
+import 'package:shopio/model/product.dart';
 import 'package:shopio/screen/categoryadd/categoryadd.dart';
 import 'package:shopio/screen/categorylist/categorylist.dart';
 import 'package:shopio/screen/homescreen/homescreen.dart';
@@ -66,7 +67,9 @@ class AppRoute {
         return MaterialPageRoute(builder: (context) => ProductListScreen(),);
 
       case productadd:
-        return MaterialPageRoute(builder: (context) => ProductAdd(),);
+        Product ? product =
+        settings.arguments != null ? settings.arguments as Product : null;
+        return MaterialPageRoute(builder: (context) => ProductAdd(product:product),);
     }
   }
 }
