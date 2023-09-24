@@ -108,7 +108,6 @@ class FirebaseService {
     }catch (e){
       return false;
     }
-
   }
 
 
@@ -148,4 +147,5 @@ Future<String?> uploadproductimage(File imageFile) async {
   }
   return url;
 }
+
 }
