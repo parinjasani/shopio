@@ -16,6 +16,8 @@ class FirebaseService {
 
   FirebaseService.internal();
 
+
+
   final FirebaseAuth mAuth = FirebaseAuth.instance;
 
   final DatabaseReference _mRef = FirebaseDatabase.instance.ref(); // path of root
